@@ -1,72 +1,136 @@
-Combined Cycle Power Plant Data Quality and Analysis Report
-Project Purpose
-This project demonstrates a Python data analysis workflow for a Combined Cycle Power Plant dataset. The goal was to inspect the raw dataset, evaluate data quality, clean and validate the data, create a basic data catalog, and summarize relationships between operating conditions and electrical power output.
+# Combined Cycle Power Plant Data Quality Analysis
 
-The analysis was completed using Python and pandas. The workflow focused on data quality, data cataloging, and repeatable reporting, which are directly relevant to enterprise data platform work.
+This project demonstrates a Python-based data quality and analysis workflow for a Combined Cycle Power Plant dataset. The workflow focuses on data inspection, cleaning, validation, data cataloging, summary statistics, and correlation analysis.
 
-Dataset Overview
-The original dataset contained 47,844 rows and 5 columns. The columns were:
+The project was designed to show practical data analytics skills relevant to enterprise data platform work, including:
 
-Column	Description
-AT / at	Ambient temperature
-V / v	Exhaust vacuum
-AP / ap	Ambient pressure
-RH / rh	Relative humidity
-PE / pe	Electrical power output
-The column names were standardized by removing extra spaces, converting names to lowercase, and replacing spaces with underscores. This changed the column names from AT, V, AP, RH, and PE to at, v, ap, rh, and pe.
+- Data quality checks
+- Data type validation
+- Invalid record identification
+- Data catalog creation
+- Cleaned dataset export
+- Summary and correlation reporting
 
-Data Quality Review
-The first data quality check reviewed missing values, duplicate rows, and data types.
+## Dataset Overview
 
-The initial missing value check showed no blank values in the imported dataset. The duplicate check also showed no fully duplicated records. However, the data type check showed that all five columns were imported as string/object values instead of numeric values.
+The original dataset contained **47,844 rows** and **5 columns**.
 
-Because the columns represent numeric measurements, all five columns were converted to numeric data types using pd.to_numeric(). After conversion, four rows became missing across all five columns. These rows contained non-numeric values, specifically repeated header records such as AT, V, AP, RH, PE embedded inside the dataset. Since these rows were not valid measurement records, they were removed.
+| Column | Description |
+|---|---|
+| `AT` / `at` | Ambient temperature |
+| `V` / `v` | Exhaust vacuum |
+| `AP` / `ap` | Ambient pressure |
+| `RH` / `rh` | Relative humidity |
+| `PE` / `pe` | Electrical power output |
 
-After removing the invalid rows, the final cleaned dataset contained 47,840 rows and 5 columns. A final missing value check confirmed that the cleaned dataset had no remaining missing values.
+Column names were standardized from uppercase labels to lowercase names:
 
-Data Catalog Summary
-The cleaned dataset contains five numeric columns, all stored as float64.
+```text
+AT, V, AP, RH, PE
+```
 
-Column	Data Type	Missing Count	Unique Values	Min	Max	Mean
-at	float64	0	2,773	1.81	37.11	19.65
-v	float64	0	634	25.36	81.56	54.31
-ap	float64	0	2,517	992.89	1033.30	1013.26
-rh	float64	0	4,546	25.56	100.16	73.31
-pe	float64	0	4,836	420.26	495.76	454.37
-The unique value counts show that the fields are continuous measurement variables rather than categorical fields. The dataset is therefore appropriate for statistical analysis, correlation analysis, and potential predictive modeling.
+became:
 
-Summary Statistics
-The cleaned dataset shows that electrical power output ranges from 420.26 to 495.76, with an average value of 454.37. Ambient temperature ranges from 1.81 to 37.11, with an average of 19.65. Exhaust vacuum ranges from 25.36 to 81.56, with an average of 54.31.
+```text
+at, v, ap, rh, pe
+```
 
-These summary statistics provide a general profile of the operating conditions represented in the dataset and confirm that the cleaned data contains reasonable numeric ranges for analysis.
+## Workflow
 
-Correlation Analysis
-The correlation analysis compared each variable with electrical power output (pe). The strongest relationships were:
+The Python workflow follows these main steps:
 
-Variable	Correlation with pe	Interpretation
-at	-0.95	Very strong negative relationship
-v	-0.87	Strong negative relationship
-ap	0.52	Moderate positive relationship
-rh	0.39	Weak to moderate positive relationship
-Ambient temperature has the strongest relationship with power output. The correlation of -0.95 means that as ambient temperature increases, electrical power output tends to decrease. Exhaust vacuum also has a strong negative relationship with power output, with a correlation of -0.87.
+1. Load and inspect the dataset.
+2. Standardize column names.
+3. Check for missing values.
+4. Check for duplicate rows.
+5. Review and correct data types.
+6. Identify invalid non-numeric records.
+7. Remove invalid rows.
+8. Create a data catalog summary.
+9. Generate summary statistics.
+10. Create a correlation matrix.
+11. Export cleaned data and analysis outputs.
 
-Ambient pressure and relative humidity show positive relationships with power output, but these relationships are weaker than temperature and vacuum.
+## Data Quality Findings
 
-Key Findings
-The main data quality finding was that the dataset initially appeared complete, but the data type conversion step revealed four invalid rows. These rows were repeated header records inside the raw dataset. Removing them produced a clean numeric dataset suitable for analysis.
+The initial missing value check showed no blank values in the imported dataset. The duplicate check also showed no fully duplicated records.
 
-The main analytical finding is that power output is most strongly associated with ambient temperature and exhaust vacuum. Higher ambient temperature and higher exhaust vacuum are both associated with lower electrical power output. Ambient pressure and relative humidity are positively related to power output, but their relationships are less influential based on correlation values.
+However, the data type check showed that all five columns were imported as string/object values instead of numeric values. Since the columns represent measurements, they were converted to numeric data types using `pd.to_numeric()`.
 
-Outputs Created
-The Python workflow produced the following files:
+After conversion, four rows became missing across all five columns. These rows contained repeated header records such as:
 
-cleaned_combined_cycle_power_plant.csv
-data_catalog_summary.csv
-summary_statistics.csv
-correlation_matrix.csv
-These outputs support a repeatable workflow for data quality review, metadata documentation, statistical summary, and analysis reporting.
+```text
+AT,V,AP,RH,PE
+```
 
-Conclusion
-This project demonstrates a practical data analysis workflow using Python. The process included importing and inspecting the dataset, standardizing column names, checking for missing values and duplicates, correcting data types, identifying invalid records, removing invalid rows, creating a data catalog, generating summary statistics, and analyzing correlations.
+Because those rows were not valid measurement records, they were removed.
 
-The cleaned dataset is now ready for further analysis, dashboard development, or predictive modeling. From a business and data platform perspective, the workflow supports reliable data preparation, transparent documentation, and reusable reporting.
+Final cleaned dataset:
+
+| Item | Count |
+|---|---:|
+| Original rows | 47,844 |
+| Invalid rows removed | 4 |
+| Final cleaned rows | 47,840 |
+| Final columns | 5 |
+| Remaining missing values | 0 |
+
+## Data Catalog Summary
+
+| Column | Data Type | Missing Count | Unique Values | Min | Max | Mean |
+|---|---:|---:|---:|---:|---:|---:|
+| `at` | float64 | 0 | 2,773 | 1.81 | 37.11 | 19.65 |
+| `v` | float64 | 0 | 634 | 25.36 | 81.56 | 54.31 |
+| `ap` | float64 | 0 | 2,517 | 992.89 | 1033.30 | 1013.26 |
+| `rh` | float64 | 0 | 4,546 | 25.56 | 100.16 | 73.31 |
+| `pe` | float64 | 0 | 4,836 | 420.26 | 495.76 | 454.37 |
+
+The unique value counts show that the fields are continuous measurement variables rather than categorical fields.
+
+## Correlation Findings
+
+The correlation analysis compared each operating variable with electrical power output (`pe`).
+
+| Variable | Correlation with `pe` | Interpretation |
+|---|---:|---|
+| `at` | -0.95 | Very strong negative relationship |
+| `v` | -0.87 | Strong negative relationship |
+| `ap` | 0.52 | Moderate positive relationship |
+| `rh` | 0.39 | Weak to moderate positive relationship |
+
+The strongest relationship is between ambient temperature (`at`) and electrical power output (`pe`). The correlation of **-0.95** means that as ambient temperature increases, power output tends to decrease.
+
+Exhaust vacuum (`v`) also has a strong negative relationship with power output. Ambient pressure (`ap`) and relative humidity (`rh`) have positive relationships with power output, but their relationships are weaker.
+
+## Key Takeaways
+
+- The dataset required data type correction before analysis.
+- Four repeated header rows were found inside the raw data and removed.
+- The final dataset contains 47,840 clean numeric records.
+- Ambient temperature and exhaust vacuum have the strongest relationships with power output.
+- The cleaned dataset is ready for additional analysis, dashboard development, or predictive modeling.
+
+## Files in This Repository
+
+| File | Description |
+|---|---|
+| `combined_cycle_power_plant.py` | Main Python workflow |
+| `combined_cycle_power_plant.csv` | Original dataset |
+| `cleaned_combined_cycle_power_plant.csv` | Cleaned dataset after validation |
+| `data_catalog_summary.csv` | Metadata and quality summary by column |
+| `summary_statistics.csv` | Descriptive statistics |
+| `correlation_matrix.csv` | Correlation matrix |
+| `combined_cycle_power_plant_report.md` | Full written analysis report |
+
+## Tools Used
+
+- Python
+- pandas
+
+## How to Run
+
+```bash
+python combined_cycle_power_plant.py
+```
+
+Running the script regenerates the cleaned dataset and summary output files.
