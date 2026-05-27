@@ -1,0 +1,6 @@
+column_name,data_type,missing_count,missing_percentage,unique_values,min_value,max_values,mean_value
+at,float64,0,0.0,2773,1.81,37.11,19.65
+v,float64,0,0.0,634,25.36,81.56,54.31
+ap,float64,0,0.0,2517,992.89,1033.3,1013.26
+rh,float64,0,0.0,4546,25.56,100.16,73.31
+pe,float64,0,0.0,4836,420.26,495.76,454.37
